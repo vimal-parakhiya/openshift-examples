@@ -1,0 +1,1 @@
+FROM openshift/origin-haproxy-router:v1.5.0

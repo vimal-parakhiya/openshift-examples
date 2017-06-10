@@ -1,0 +1,47 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "kind": "Service",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "ext-service-endpoint"
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "http",
+            "protocol": "TCP",
+            "port": 8080,
+            "targetPort": 80,
+            "nodePort": 0
+          }
+        ]
+      },
+      "selector": {
+      }
+    },
+    {
+      "kind": "Endpoints",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "ext-service-endpoint"
+      },
+      "subsets": [
+        {
+          "addresses": [
+            {
+              "ip": "223.165.30.126"
+            }
+          ],
+          "ports": [
+            {
+              "port": 80
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

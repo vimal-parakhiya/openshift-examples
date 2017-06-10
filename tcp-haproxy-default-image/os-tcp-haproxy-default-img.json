@@ -1,0 +1,99 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "tcp-haproxy-default-img"
+      },
+      "spec": {
+        "template": {
+          "metadata": {
+            "labels": {
+              "name": "tcp-haproxy-default-img"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "tcp-haproxy-default-img",
+                "image": "172.30.1.1:5000/oc-tcp-haproxy/os-tcp-haproxy-default-img",
+                "ports": [
+                  {
+                    "containerPort": 18080,
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 19090,
+                    "protocol": "TCP"
+                  }
+                ],
+                "env": [
+                  {
+                  "name":"TEMPLATE_FILE",
+                  "value":"/var/lib/haproxy/conf/custom-config/haproxy-config.template"
+                  }
+                ],
+                "volumeMounts":[
+                  {
+                    "name": "config-volume",
+                    "mountPath": "/var/lib/haproxy/conf/custom-config"
+                  }
+                ]
+              }
+            ],
+            "volumes": [
+              {
+                "name":"config-volume",
+                "configMap": {
+                  "name":"tcp-haproxy-default-img"
+                }
+              }
+            ]
+          }
+        },
+        "replicas": 1,
+        "selector": {
+          "name": "tcp-haproxy-default-img"
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "strategy": {
+          "type": "Rolling"
+        }
+      }
+    },
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "tcp-haproxy-default-img"
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "port1",
+            "protocol": "TCP",
+            "port": 18080,
+            "targetPort": 18080
+          },
+          {
+            "name": "port2",
+            "protocol": "TCP",
+            "port": 19090,
+            "targetPort": 19090
+          }
+        ],
+        "selector": {
+          "name": "tcp-haproxy-default-img",
+          "deploymentconfig": "tcp-haproxy-default-img"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "ext-service-ext-name-2"
+  },
+  "spec": {
+    "type": "ExternalName",
+    "externalName": "gaana.com",
+    "ports" : [
+      {
+        "port": 8080
+      }
+    ]
+  },
+  "selector": {
+  }
+}
