@@ -39,15 +39,15 @@
                   },
                   {
                     "name": "SENDER_DELAY_BETWEEN_MESSAGES",
-                    "value": "100"
+                    "value": "10"
                   },
                   {
                     "name": "SENDER_RETRY_DELAY",
-                    "value": "50"
+                    "value": "20"
                   },
                   {
                     "name": "SENDER_MAX_RETRY_COUNT",
-                    "value": "100"
+                    "value": "10000"
                   }
                 ]
               }

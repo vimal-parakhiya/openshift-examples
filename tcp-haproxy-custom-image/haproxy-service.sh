@@ -16,7 +16,7 @@ if cmp $CONFIG_FILE /tmp/watch-configmap/tmp.config; then
 else
     echo "HA proxy configuration changed... reloading.."
     cp $CONFIG_FILE /tmp/watch-configmap/tmp.config
-    /usr/sbin/haproxy -f $CONFIG_FILE -p haproxy.pid -sf $(cat haproxy.pid)
+    /usr/sbin/haproxy -f $CONFIG_FILE -p haproxy.pid -st $(cat haproxy.pid)
     echo "HA proxy configuration reloaded.."
 fi
 echo "------------------------------------------------------"
