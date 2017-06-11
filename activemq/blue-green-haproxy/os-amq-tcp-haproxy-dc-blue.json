@@ -6,21 +6,30 @@
       "kind": "DeploymentConfig",
       "apiVersion": "v1",
       "metadata": {
-        "name": "tcp-haproxy-custom-img"
+        "name": "tcp-haproxy-custom-img-blue"
       },
       "spec": {
         "template": {
           "metadata": {
             "labels": {
-              "name": "tcp-haproxy-custom-img"
+              "name": "tcp-haproxy-custom-img",
+              "slice": "blue"
             }
           },
           "spec": {
             "containers": [
               {
-                "name": "tcp-haproxy-custom-img",
-                "image": "172.30.1.1:5000/oc-tcp-haproxy/os-tcp-haproxy-custom-img",
+                "name": "tcp-haproxy-custom-img-blue",
+                "image": "172.30.1.1:5000/oc-activemq/os-amq-tcp-haproxy",
                 "ports": [
+                  {
+                    "containerPort": 16060,
+                    "protocol": "TCP"
+                  },
+                  {
+                    "containerPort": 17070,
+                    "protocol": "TCP"
+                  },
                   {
                     "containerPort": 18080,
                     "protocol": "TCP"
@@ -30,10 +39,10 @@
                     "protocol": "TCP"
                   }
                 ],
-                "env" :[
+                "env": [
                   {
-                    "name": "CONFIG_FILE",
-                    "value": "/var/lib/haproxy/conf/custom-config/haproxy.config"
+                    "name":"CONFIG_FILE",
+                    "value":"/var/lib/haproxy/conf/custom-config/haproxy-blue.config"
                   }
                 ],
                 "volumeMounts":[
@@ -48,7 +57,7 @@
               {
                 "name":"config-volume",
                 "configMap": {
-                  "name":"tcp-haproxy-custom-img"
+                  "name":"tcp-haproxy-custom-img-blue"
                 }
               }
             ]
@@ -56,7 +65,8 @@
         },
         "replicas": 1,
         "selector": {
-          "name": "tcp-haproxy-custom-img"
+          "name": "tcp-haproxy-custom-img",
+          "slice": "blue"
         },
         "triggers": [
           {
@@ -64,34 +74,7 @@
           }
         ],
         "strategy": {
-          "type": "Rolling"
-        }
-      }
-    },
-    {
-      "apiVersion": "v1",
-      "kind": "Service",
-      "metadata": {
-        "name": "tcp-haproxy-custom-img"
-      },
-      "spec": {
-        "ports": [
-          {
-            "name": "port1",
-            "protocol": "TCP",
-            "port": 18080,
-            "targetPort": 18080
-          },
-          {
-            "name": "port2",
-            "protocol": "TCP",
-            "port": 19090,
-            "targetPort": 19090
-          }
-        ],
-        "selector": {
-          "name": "tcp-haproxy-custom-img",
-          "deploymentconfig": "tcp-haproxy-custom-img"
+          "type": "Recreate"
         }
       }
     }

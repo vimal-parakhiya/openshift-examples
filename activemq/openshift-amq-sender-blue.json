@@ -1,0 +1,72 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "kind": "DeploymentConfig",
+      "apiVersion": "v1",
+      "metadata": {
+        "name": "activemq-sender-blue"
+      },
+      "spec": {
+        "template": {
+          "metadata": {
+            "labels": {
+              "name": "activemq-sender-blue"
+            }
+          },
+          "spec": {
+            "containers": [
+              {
+                "name": "activemq-sender-blue",
+                "image": "172.30.1.1:5000/oc-activemq/os-amq-tester",
+                "env": [
+                  {
+                    "name":"SPRING_ACTIVEMQ_BROKERURL",
+                    "value":"tcp://tcp-haproxy-custom-img:16060"
+                  },
+                  {
+                    "name":"ENABLE_SENDER",
+                    "value":"true"
+                  },
+                  {
+                    "name":"ENABLE_RECEIVER",
+                    "value":"false"
+                  },
+                  {
+                    "name":"APP_SLICE",
+                    "value": "Blue"
+                  },
+                  {
+                    "name": "SENDER_DELAY_BETWEEN_MESSAGES",
+                    "value": "100"
+                  },
+                  {
+                    "name": "SENDER_RETRY_DELAY",
+                    "value": "50"
+                  },
+                  {
+                    "name": "SENDER_MAX_RETRY_COUNT",
+                    "value": "100"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "replicas": 1,
+        "selector": {
+          "name": "activemq-sender-blue"
+        },
+        "triggers": [
+          {
+            "type": "ConfigChange"
+          }
+        ],
+        "strategy": {
+          "type": "Rolling"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "apiVersion": "v1",
+  "kind": "List",
+  "items": [
+    {
+      "apiVersion": "v1",
+      "kind": "Service",
+      "metadata": {
+        "name": "tcp-haproxy-custom-img"
+      },
+      "spec": {
+        "ports": [
+          {
+            "name": "port1",
+            "protocol": "TCP",
+            "port": 16060,
+            "targetPort": 16060
+          },
+          {
+            "name": "port2",
+            "protocol": "TCP",
+            "port": 17070,
+            "targetPort": 17070
+          },
+          {
+            "name": "port3",
+            "protocol": "TCP",
+            "port": 18080,
+            "targetPort": 18080
+          },
+          {
+            "name": "port4",
+            "protocol": "TCP",
+            "port": 19090,
+            "targetPort": 19090
+          }
+        ],
+        "selector": {
+          "name": "tcp-haproxy-custom-img",
+          "deploymentconfig": "tcp-haproxy-custom-img-blue",
+          "slice": "blue"
+        }
+      }
+    }
+  ]
+}
